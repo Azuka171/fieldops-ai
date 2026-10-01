@@ -1671,16 +1671,35 @@ function App() {
 
                     <strong
                       className={`status-badge finding-${(
-                        selectedIncident.check_finding || "not-recorded"
+                        Object.values(selectedIncident.diagnostic_findings || {})
+                          .filter(Boolean)
+                          .pop() ||
+                        selectedIncident.check_finding ||
+                        "not-recorded"
                       )
                         .toLowerCase()
                         .replace(/\s+/g, "-")}`}
                     >
-                      {selectedIncident.check_finding === "normal"
+                      {(
+                        Object.values(selectedIncident.diagnostic_findings || {})
+                          .filter(Boolean)
+                          .pop() ||
+                        selectedIncident.check_finding
+                      ) === "normal"
                         ? "Normal"
-                        : selectedIncident.check_finding === "abnormal"
+                        : (
+                              Object.values(selectedIncident.diagnostic_findings || {})
+                                .filter(Boolean)
+                                .pop() ||
+                              selectedIncident.check_finding
+                            ) === "abnormal"
                           ? "Abnormal"
-                          : selectedIncident.check_finding === "not_tested"
+                          : (
+                                Object.values(selectedIncident.diagnostic_findings || {})
+                                  .filter(Boolean)
+                                  .pop() ||
+                                  selectedIncident.check_finding
+                              ) === "not_tested"
                             ? "Not Tested"
                             : "Not recorded"}
                     </strong>
